@@ -1,3 +1,5 @@
 *
 !README
 !*.tex
+!build.sh
+papers/
