@@ -1,5 +1,7 @@
-*
-!README
-!*.tex
-!build.sh
-papers/
+*.aux
+*.out
+*.log
+*.swp
+*.pdf
+!papers/*
+.DS_Store
