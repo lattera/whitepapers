@@ -3,3 +3,29 @@ towards malware authors. Microsoft even provides a library called detours which 
 injecting DLLs into a process during runtime extremely easy. Detours, however, does
 not provide stealth. Linux has a similar project called injectso. Injectso is a
 non-stealthy solution for injecting shared objects into a process during runtime.
+
+If a system administrator thinks a service running on a server has been exploited,
+one thing the administrator can do is look at the /proc/[pid]/maps file and look
+at what shared objects are loaded. As an example, let's say we're targeting the
+Apache web server. We want to drop into a shell whenever the string
+``\texttt{GET /shell HTTP/1.1}" is sent to Apache over the socket. If we were to
+use injectso, we'd inject a shared object in such a way that the administrator
+would see an entry that matches \texttt{/path/to/evil.so}. Obviously, the system's
+administrator knows at that point the game is over. And so will you when you try
+to get back in.
+
+Therefore, we need a stealthy way to inject our shared object. Our requirements are:
+\begin{enumerate}
+\item{Inject shared objects}
+\item{Hook dynamically-loaded functions}
+\item{Stealth}
+\end{enumerate}
+
+In the rest of this paper, we will discuss:
+\begin{enumerate}
+\item{Current techniques for storing and executing arbitrary shellcode}
+\item{The Executable and Linkable Format (ELF)}
+\item{The new technique for storing and executing arbitrary shellcode}
+\item{Hooking dynamically-loaded functions}
+\item{Future work}
+\end{enumerate}
