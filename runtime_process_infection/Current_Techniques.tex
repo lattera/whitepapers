@@ -2,3 +2,23 @@ Many techniques exist for storing and executing arbitrary code. For decades, sto
 code on the stack has been a known technique\footnote{See aleph1's famous Phrack article,
 \href{http://www.phrack.com/issues.html?issue=49&id=14&mode=txt}{Smashing The Stack For Fun And Profit}}.
 Being well known, this technique is very well protected against\footnote{Add footnote for non-exec stack}.
+We can store our shellcode on the heap. Using the heap would be really simple since
+we can easily expand it with the \texttt{brk} system call. This technique is
+relatively old as well. Many systems are setting the heap to be non-executable.
+With the stack and the heap being protected, the other option would be to store our
+code where \$eip points to. This would be an ideal solution, except that we need
+to hook dynamically-loaded functions. Meaning, by overwriting the code at \$eip, we
+destroy any chance of the program using that spot in memory again unless we backup
+and restore the original code. Restoring the code would remove our injection,
+meaning our code can only run once. All current techniques (including injectso) use
+this method.
+
+Since our main goal is to let our code run multiple times, we need a place in which
+our code can reside. We can can store code on the stack and heap, but we can't
+guarantee execution. We can store code at \$eip, but we are limited to a
+run-once scheme. We have an interesting dillema on our hands: we have no place to
+put our code and guarantee repeated execution.
+
+Spoiler alert: We will inject into a new anonymous memory mapping. This mapping will
+hold our malicious code and will be marked as executable. The next few chapters
+discuss how we go about forcing the victim process to create a new memory mapping.
